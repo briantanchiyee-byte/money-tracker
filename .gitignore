@@ -1,0 +1,8 @@
+# 备份 / 导出文件里有个人资料，永远不要上传
+*backup*.json
+*.csv
+
+node_modules/
+.claude/
+.DS_Store
+Thumbs.db

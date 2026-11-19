@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="referrer" content="no-referrer">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="记账">
+  <meta name="format-detection" content="telephone=no">
+  <title>记账</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
+  <link rel="icon" type="image/png" href="assets/icons/icon-192.png">
+  <link rel="stylesheet" href="styles/tokens.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/screens.css">
+  <script type="module" src="src/main.js"></script>
+</head>
+<body>
+  <div id="app" class="app">
+    <main id="screen" class="screen" tabindex="-1">
+      <p class="boot">载入中…</p>
+    </main>
+
+    <nav class="tabbar" aria-label="主导航">
+      <button type="button" class="tab" data-action="tab" data-tab="today" aria-current="page">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-calendar"></use></svg>
+        <span>今天</span>
+      </button>
+      <button type="button" class="tab" data-action="tab" data-tab="settings">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-sliders"></use></svg>
+        <span>设置</span>
+      </button>
+    </nav>
+
+    <button type="button" class="fab" data-action="add" aria-label="记一笔">
+      <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-plus"></use></svg>
+    </button>
+  </div>
+
+  <div id="sheet-root"></div>
+  <div id="toast-root" aria-live="polite"></div>
+
+  <noscript><p class="boot">需要开启 JavaScript 才能使用。</p></noscript>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "expenses-tracker",
+  "private": true,
+  "type": "module",
+  "description": "只给自己用的记账 PWA。没有依赖，不需要 npm install。",
+  "scripts": {
+    "test": "node --test",
+    "check": "node scripts/check-security.mjs",
+    "serve": "node scripts/serve.mjs",
+    "phone": "node scripts/serve.mjs --lan",
+    "icons": "node scripts/make-icons.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

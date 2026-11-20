@@ -2,7 +2,7 @@
 // 每次发布都要改 VERSION（并和 src/version.js 一样），手机才会提示「有新版本」。
 // 新增或删除文件时，也要更新 ASSETS（tests/release.test.mjs 会检查）。
 
-const VERSION = '0.1.0';
+const VERSION = '0.2.0';
 const CACHE = `expenses-${VERSION}`;
 
 const ASSETS = [
@@ -14,16 +14,26 @@ const ASSETS = [
   'assets/icons/icon-512.png',
   'assets/icons/sprite.svg',
   'src/core/categories.js',
+  'src/core/budget.js',
   'src/core/dates.js',
   'src/core/html.js',
   'src/core/money.js',
+  'src/core/periods.js',
+  'src/core/plan.js',
+  'src/core/records.js',
+  'src/core/recurring.js',
   'src/core/transactions.js',
   'src/data/db.js',
   'src/data/store.js',
   'src/main.js',
   'src/ui/app.js',
   'src/ui/entry-sheet.js',
+  'src/ui/form-sheet.js',
   'src/ui/icons.js',
+  'src/ui/plan-sheet.js',
+  'src/ui/records.js',
+  'src/ui/recurring-sheet.js',
+  'src/ui/rows.js',
   'src/ui/settings.js',
   'src/ui/swipe.js',
   'src/ui/toast.js',

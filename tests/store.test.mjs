@@ -66,3 +66,58 @@ test('不合理的输入不会写进资料库', async () => {
   await assert.rejects(store.update('missing', { amount: 100 }), /找不到/);
   assert.equal((await backend.getAll('transactions')).length, 0);
 });
+
+test('每月计划会存下来，重新打开还在', async () => {
+  const backend = memoryBackend();
+  const store = await createStore(backend);
+  assert.equal(store.plan().expectedIncome, null);
+  await store.savePlan({ ...store.plan(), expectedIncome: 400000, periodMode: 'cycle', cycleWindow: { from: 10, to: 15 } });
+  const again = await createStore(backend);
+  assert.equal(again.plan().expectedIncome, 400000);
+  assert.deepEqual(again.plan().cycleWindow, { from: 10, to: 15 });
+});
+
+test('固定项目：到期自动记账，重复打开不会重复记', async () => {
+  const backend = memoryBackend();
+  const store = await createStore(backend);
+  await store.addRecurring(
+    { type: 'expense', amount: 120000, categoryId: 'rent', note: '房租', day: 1 },
+    { today: '2026-10-20', id: 'rent' },
+  );
+  assert.equal(await store.postDueRecurring('2026-10-31'), 0);
+  assert.equal(await store.postDueRecurring('2026-11-01'), 1);
+  assert.equal(await store.postDueRecurring('2026-11-01'), 0);
+  const again = await createStore(backend);
+  assert.equal(await again.postDueRecurring('2026-11-02'), 0);
+  assert.equal(again.transactions().length, 1);
+  assert.equal(again.transactions()[0].recurringId, 'rent');
+  assert.equal(again.getRecurring('rent').lastMonth, '2026-11');
+});
+
+test('固定项目：自动记账中途失败，下次不会重复记', async () => {
+  const backend = memoryBackend();
+  const store = await createStore(backend);
+  await store.addRecurring({ type: 'expense', amount: 5000, categoryId: 'phone', day: 1 }, { today: '2026-10-20', id: 'p' });
+  const put = backend.put;
+  backend.put = async (name, value) => {
+    if (name === 'recurring') throw new Error('写不进去');
+    return put(name, value);
+  };
+  await assert.rejects(store.postDueRecurring('2026-11-01'), /写不进去/);
+  backend.put = put;
+  const again = await createStore(backend);
+  assert.equal(await again.postDueRecurring('2026-11-01'), 0); // 11 月已经记过了
+  assert.equal(again.transactions().length, 1);
+});
+
+test('删除固定项目会保留已经记下的交易，也能撤销', async () => {
+  const backend = memoryBackend();
+  const store = await createStore(backend);
+  await store.addRecurring({ type: 'expense', amount: 5000, categoryId: 'phone', day: 1 }, { today: '2026-10-20', id: 'p' });
+  await store.postDueRecurring('2026-11-01');
+  const removed = await store.removeRecurring('p');
+  assert.equal(store.recurring().length, 0);
+  assert.equal(store.transactions().length, 1);
+  await store.restoreRecurring(removed);
+  assert.equal(store.recurring().length, 1);
+});

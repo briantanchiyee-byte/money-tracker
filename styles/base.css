@@ -44,7 +44,8 @@ button:disabled {
   opacity: 0.35;
 }
 
-input {
+input,
+select {
   font: inherit;
   color: inherit;
 }

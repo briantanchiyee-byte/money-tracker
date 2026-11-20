@@ -1,14 +1,57 @@
 import { html } from '../core/html.js';
-import { activeCategories } from '../core/categories.js';
+import { formatMoney } from '../core/money.js';
+import { activeCategories, findCategory } from '../core/categories.js';
+import { hasPlan, monthlySpendable } from '../core/plan.js';
+import { icon } from './icons.js';
 
 const chip = (c) => html`
   <span class="cat-chip">
     <span class="cat-icon small" data-color="${c.color}" aria-hidden="true">${c.icon}</span>${c.name}
   </span>`;
 
-export function renderSettings({ version, transactions, categories, standalone, persistent }) {
+function planSection(plan) {
+  if (!hasPlan(plan)) {
+    return html`
+      <section class="card group">
+        <button type="button" class="cell cell-button" data-action="open-plan">设定每月计划</button>
+      </section>
+      <p class="footnote">设定后，「今天」会显示每天还能花多少。</p>`;
+  }
+  const w = plan.cycleWindow;
+  const period = plan.periodMode === 'cycle' ? `收入周期（${w.from}–${w.to} 号）` : '日历月';
+  return html`
+    <section class="card group">
+      <div class="cell"><span>每月预计收入</span><span class="cell-value num">${formatMoney(plan.expectedIncome)}</span></div>
+      <div class="cell"><span>每月存款目标</span><span class="cell-value num">${formatMoney(plan.savingsTarget)}</span></div>
+      <div class="cell"><span>每月可以花</span><span class="cell-value num strong">${formatMoney(monthlySpendable(plan))}</span></div>
+      <div class="cell"><span>预算周期</span><span class="cell-value">${period}</span></div>
+      <div class="cell"><span>生意支出</span><span class="cell-value">${plan.budgetIncludesBusiness ? '占每日额度' : '另外列出'}</span></div>
+      <button type="button" class="cell cell-button" data-action="open-plan">修改计划</button>
+    </section>`;
+}
+
+function recurringRow(item, categories) {
+  const cat = findCategory(categories, item.categoryId);
+  const name = item.note || cat.name;
+  const amount = item.type === 'income' ? formatMoney(item.amount, { sign: true }) : formatMoney(-item.amount);
+  return html`
+    <li>
+      <button type="button" class="row-main ${item.active ? '' : 'paused'}" data-action="edit-recurring" data-id="${item.id}"
+        aria-label="${name}，每月 ${item.day} 号，${item.type === 'income' ? '收入' : '支出'} ${formatMoney(item.amount)}${item.active ? '' : '，已暂停'}，点一下修改">
+        <span class="cat-icon" data-color="${cat.color}" aria-hidden="true">${cat.icon}</span>
+        <span class="row-text">
+          <span class="row-title">${name}${item.business ? html`<span class="badge">生意</span>` : ''}${item.active ? '' : html`<span class="badge plain">暂停</span>`}</span>
+          <span class="row-sub">每月 ${item.day} 号 · ${cat.name}</span>
+        </span>
+        <span class="row-amount num ${item.type}">${amount}</span>
+      </button>
+    </li>`;
+}
+
+export function renderSettings({ version, transactions, categories, standalone, persistent, plan, recurring }) {
   const expense = activeCategories(categories, 'expense');
   const income = activeCategories(categories, 'income');
+  const items = [...recurring].sort((a, b) => b.active - a.active || a.day - b.day);
 
   return html`
     <header class="page-head"><h1 class="large-title">设置</h1></header>
@@ -23,6 +66,16 @@ export function renderSettings({ version, transactions, categories, standalone, 
         </ol>
         <p class="group-foot">装好后从主屏幕打开，就像普通 App，没网也能用。</p>
       </section>`}
+
+    <h2 class="section-title"><span>每月计划</span></h2>
+    ${planSection(plan)}
+
+    <h2 class="section-title"><span>固定项目</span></h2>
+    <section class="card group">
+      ${items.length ? html`<ul class="list">${items.map((i) => recurringRow(i, categories))}</ul>` : ''}
+      <button type="button" class="cell cell-button with-icon" data-action="add-recurring">${icon('plus')}<span>新增固定项目</span></button>
+    </section>
+    <p class="footnote">房租、电话费、订阅、薪水……到期那天会自动记一笔，还没到期的会先从额度里预留。</p>
 
     <h2 class="section-title"><span>资料</span></h2>
     <section class="card group">

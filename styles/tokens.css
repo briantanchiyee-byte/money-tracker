@@ -21,6 +21,7 @@
   --income: #0a8a5b;
   --danger: #d92d20;
   --business: #5856d6;
+  --warning: #f59e0b;
   --warning-bg: #fff4e0;
 
   --toast-bg: rgba(28, 28, 30, 0.94);
@@ -93,6 +94,7 @@
     --income: #30d158;
     --danger: #ff453a;
     --business: #8e8cff;
+    --warning: #ffb340;
     --warning-bg: #3a2a10;
 
     --toast-bg: rgba(58, 58, 60, 0.96);

@@ -50,6 +50,16 @@ test('sprite.svg 里有程序用到的每一个图标', () => {
   for (const name of used) assert.ok(sprite.includes(`id="i-${name}"`), `sprite.svg 缺少 i-${name}`);
 });
 
+test('程序用到的每一个图标都在 icons.js 的名单里（不然画面会当掉）', () => {
+  const allowed = /const NAMES = new Set\(\[([\s\S]*?)\]\)/.exec(read('src/ui/icons.js'))[1];
+  const names = new Set([...allowed.matchAll(/'([\w-]+)'/g)].map((m) => m[1]));
+  for (const file of listFiles('src')) {
+    for (const m of read(file).matchAll(/icon\('([\w-]+)'\)/g)) {
+      assert.ok(names.has(m[1]), `${file} 用到 ${m[1]}，但 icons.js 的名单里没有`);
+    }
+  }
+});
+
 test('安全检查通过', () => {
   assert.deepEqual(scanProject(), []);
 });

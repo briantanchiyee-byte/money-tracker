@@ -158,3 +158,193 @@
   font-size: 14px;
   white-space: nowrap;
 }
+
+.cell-value.strong {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.cell-button.with-icon {
+  justify-content: flex-start;
+  gap: var(--space-2);
+  font-weight: 500;
+}
+
+.cell-button.with-icon .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.group .list li:not(:last-child) .row-main::after {
+  content: "";
+  position: absolute;
+  left: 68px;
+  right: 0;
+  bottom: 0;
+  height: 0.5px;
+  background: var(--separator);
+}
+
+.group .list + .cell::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: var(--space-4);
+  right: 0;
+  height: 0.5px;
+  background: var(--separator);
+}
+
+.row-main.paused {
+  opacity: 0.55;
+}
+
+/* ---------- 今天还能花 ---------- */
+
+.hero {
+  padding: var(--space-5);
+}
+
+.hero-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-2);
+}
+
+.period-chip {
+  min-height: 32px;
+  padding: 0 10px;
+  border-radius: var(--radius-pill);
+  background: var(--fill);
+  color: var(--text-2);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.hero-amount {
+  margin-top: 2px;
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  color: var(--accent);
+  overflow-wrap: anywhere;
+}
+
+.hero-amount.over {
+  color: var(--danger);
+}
+
+.hero-line {
+  margin-top: var(--space-1);
+  font-size: 14px;
+  color: var(--text-2);
+}
+
+.hero-notes {
+  display: grid;
+  gap: var(--space-1);
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--warning-bg);
+  font-size: 13px;
+}
+
+.stat-value.negative {
+  color: var(--danger);
+}
+
+.today-strip {
+  margin: var(--space-2) var(--space-4) 0;
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+.hero.setup {
+  margin-bottom: var(--space-3);
+}
+
+.setup-text {
+  margin: var(--space-2) 0 var(--space-4);
+  color: var(--text-2);
+}
+
+/* ---------- 记录 ---------- */
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--fill);
+  color: var(--text-2);
+}
+
+.search .icon {
+  width: 18px;
+  height: 18px;
+}
+
+.search input {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font-size: 16px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: var(--space-4) 0 var(--space-3);
+}
+
+.month-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.summary.compact {
+  padding: var(--space-4) var(--space-5);
+}
+
+.summary.compact .summary-grid {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.day-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px var(--space-3);
+  margin: var(--space-5) var(--space-1) var(--space-2);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.day-total {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-2);
+}
+
+.result-count {
+  margin: var(--space-4) var(--space-1) 0;
+  font-size: 13px;
+  color: var(--text-2);
+}
